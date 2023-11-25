@@ -7,9 +7,79 @@
     <title>AI Retirement Coach</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="./assets/css/templatemo-scholar.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            /* Set a background color for the body */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            /* Set the minimum height of the body to 100% of the viewport height */
+            margin: 0;
+        }
+
+        .container {
+            margin-top: 50px;
+            /* Add margin to the top for spacing */
+            flex: 1;
+        }
+
+        .step-content {
+            max-width: 550px;
+            /* Set the maximum width of the form content */
+            margin: auto;
+            /* Center the form content */
+            border-color: black;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            /* Add margin between form groups */
+        }
+
+        .header-area {
+            background-color: #1f348a;
+            top: 0px;
+            position: relative;
+            padding: 10px;
+        }
+
+        footer p {
+            min-height: 20px;
+        }
+    </style>
 </head>
 
 <body>
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="index.html" class="logo">
+                            <h1>Simulatrix</h1>
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li class="scroll-to-section"><a href="#top" class="active">AI Retirement Coach</a></li>
+                            <li class="scroll-to-section"><a href="/index.html">Go Back</a></li>
+                            <li class="scroll-to-section"><a href="/index.html">LogOut</a></li>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
 
     <div class="container mt-5">
         <form id="multiStepForm">
@@ -85,9 +155,18 @@
         </div>
     </div>
 
+    <footer>
+        <div class="container">
+            <div class="col-lg-12">
+                <p>Designed and Developed by Team Simulatrix</p>
+            </div>
+        </div>
+    </footer>
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 
     <script>
         let currentStep = 1;
@@ -153,14 +232,17 @@
                 // Display result from Hugging Face
                 document.getElementById('resultText').innerHTML = `AI Retirement Coach's Advice: ${formattedAdvice}`;
 
+
                 // Hide the form and show the result section
                 document.getElementById('multiStepForm').style.display = 'none';
                 document.getElementById('result').style.display = 'block';
             } catch (error) {
                 console.error('Error:', error);
                 alert('An error occurred. Please try again later.');
+
             }
         }
+
 
         async function query(data) {
             const response = await fetch(
