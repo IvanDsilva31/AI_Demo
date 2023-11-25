@@ -1965,3 +1965,12 @@ body {
     width: 95%;
   }
 }
+
+/* AI Retirement Coach */
+.step-content {
+  display: none;
+}
+
+.step-content.active {
+  display: block;
+}
