@@ -48,10 +48,154 @@
         footer p {
             min-height: 20px;
         }
+
+        body.loading {
+            overflow: hidden;
+            /* Prevent scrolling when loader is present */
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            /* Semi-transparent black overlay */
+            z-index: 999;
+            /* Ensure it's below the loader */
+            display: none;
+            /* Hidden by default */
+        }
+
+        .loader-cont {
+            /* Full-screen overlay */
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            position: fixed;
+            /* Change to fixed */
+
+            /* Background color */
+            background: #292970;
+
+            /* Flex container for centering */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            /* Set a higher z-index to ensure it overlays other elements */
+            z-index: 9999;
+        }
+
+
+        .flex {
+            min-height: 60pt;
+            z-index: 10000;
+            /* Ensure the loader is above the overlay */
+        }
+
+        @-webkit-keyframes loading {
+            0% {
+                width: 50pt;
+                height: 50pt;
+                margin-top: 0;
+            }
+
+            25% {
+                height: 4pt;
+                margin-top: 23pt;
+            }
+
+            50% {
+                width: 4pt;
+            }
+
+            75% {
+                width: 50pt;
+            }
+
+            100% {
+                width: 50pt;
+                height: 50pt;
+                margin-top: 0;
+            }
+        }
+
+        @keyframes loading {
+            0% {
+                width: 50pt;
+                height: 50pt;
+                margin-top: 0;
+            }
+
+            25% {
+                height: 4pt;
+                margin-top: 23pt;
+            }
+
+            50% {
+                width: 4pt;
+            }
+
+            75% {
+                width: 50pt;
+            }
+
+            100% {
+                width: 50pt;
+                height: 50pt;
+                margin-top: 0;
+            }
+        }
+
+        .loader {
+            width: 50pt;
+            height: 50pt;
+            border-radius: 100%;
+            border: #6767fa 4pt solid;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: transparent;
+            -webkit-animation: loading 1s infinite;
+            animation: loading 1s infinite;
+        }
+
+        .load-text {
+            padding-top: 15px;
+            text-align: center;
+            font: 14pt "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color: rgb(8, 8, 8);
+        }
+
+        #multiStepForm {
+            display: block;
+            /* Initially display the form */
+
+            /* Additional styles... */
+        }
+
+        .loader-active #multiStepForm {
+            display: none;
+            /* Hide the form when the loader is active */
+        }
     </style>
 </head>
 
 <body>
+    <!-- Overlay -->
+    <div class="overlay"></div>
+    <div class="load-cont" style="position: absolute; margin-left: 420px; margin-top: 200px;">
+        <div class="flex">
+            <div class="loader">
+            </div>
+        </div>
+        <div class="load-text">
+            Compiling financial brilliance... Almost there, your money's about to get wiser!
+        </div>
+    </div>
 
     <!-- ***** Header Area Start ***** -->
     <header class="header-area header-sticky">
@@ -186,6 +330,8 @@
         async function submitForm(event) {
             event.preventDefault();
 
+            showLoader();
+
             // Collect form data and display result
             const formData = {
                 age: document.getElementById('age').value,
@@ -227,11 +373,12 @@
                 const advice = huggingFaceResponse[0].generated_text.substring(adviceStartIndex);
 
                 // Replace newline characters with HTML line breaks
-                const formattedAdvice = advice.replace(/\n/g, '<br>');
+                const formattedAdvice = advice.replace(/\n/g, '<br><br>');
 
                 // Display result from Hugging Face
                 document.getElementById('resultText').innerHTML = `AI Retirement Coach's Advice: ${formattedAdvice}`;
 
+                hideLoader();
 
                 // Hide the form and show the result section
                 document.getElementById('multiStepForm').style.display = 'none';
@@ -239,6 +386,7 @@
             } catch (error) {
                 console.error('Error:', error);
                 alert('An error occurred. Please try again later.');
+                hideLoader();
 
             }
         }
@@ -258,6 +406,36 @@
             );
             const result = await response.json();
             return result;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Hide loader by default
+            hideLoader();
+
+            // ... (your existing code)
+
+            // Add the event listener for form submission
+            document.getElementById('multiStepForm').addEventListener('submit', submitForm);
+        });
+
+        function showLoader() {
+            // Show loader and loading text
+            // Show loader
+            document.body.classList.add('loader-active');
+            document.querySelector('.loader').style.display = 'block';
+            document.querySelector('.load-text').innerHTML = 'Compiling financial brilliance... Almost there, your money\'s about to get wiser!';
+            document.body.classList.add('loading');
+            document.querySelector('.overlay').style.display = 'block';
+        }
+
+        function hideLoader() {
+            // Hide loader and loading text
+            // Hide loader
+            document.body.classList.remove('loader-active');
+            document.querySelector('.loader').style.display = 'none';
+            document.querySelector('.load-text').innerHTML = '';
+            document.body.classList.remove('loading');
+            document.querySelector('.overlay').style.display = 'none';
         }
 
         function startOver() {
