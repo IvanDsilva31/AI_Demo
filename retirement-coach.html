@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>AI Retirement Coach</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link rel="stylesheet" href="./assets/css/templatemo-scholar.css">
     <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon">
 
@@ -283,7 +284,7 @@
         /* Style for the pinboard section */
         #resultText {
             background-color: #f2f2f2;
-            border: 1px solid #ddd;
+            border: 5px solid #ddd;
             padding: 15px;
             border-radius: 8px;
             margin-top: 20px;
@@ -300,6 +301,51 @@
 
         .btn-success {
             margin-top: 20px;
+        }
+
+        .btn-danger {
+            margin-top: 20px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar-counter {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            width: 60%;
+            margin: 0 auto;
+        }
+
+        .step-indicator-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .step-indicator {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #fff;
+            border: 2px solid #007bff;
+            /* Change to your desired color */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: #555;
+            margin-right: 10px;
+            /* Adjust spacing between bubbles */
+        }
+
+        .step-indicator.active {
+            background-color: #007bff;
+            /* Change to your desired active color */
+            color: #fff;
         }
     </style>
 </head>
@@ -347,6 +393,19 @@
 
 
     <div class="container mt-5">
+        <div class="progress-bar-container">
+            <div class="progress-bar-counter">
+                <div class="step-indicator-container">
+                    <div class="step-indicator active">1</div>
+                </div>
+                <div class="step-indicator-container">
+                    <div class="step-indicator">2</div>
+                </div>
+                <div class="step-indicator-container">
+                    <div class="step-indicator">3</div>
+                </div>
+            </div>
+        </div>
         <form id="multiStepForm">
             <!-- Step 1: Age, Income, and Expenses -->
             <div class="step-content active" id="step1">
@@ -443,6 +502,12 @@
             <h2>Result</h2>
             <p id="userInfo"></p> <br>
             <p id="resultText"></p>
+            <button id="speakButton" class="btn btn-secondary btn-pill" onclick="speakAdvice()">
+                Listen to Advice <i class="fas fa-volume-up"></i>
+            </button>
+            <button id="stopButton" class="btn btn-danger btn-pill" onclick="stopSpeaking()">
+                Stop Listening <i class="fas fa-stop"></i>
+            </button>
             <button class="btn btn-primary" onclick="startOver()">Start Over</button>
         </div>
     </div>
@@ -463,20 +528,33 @@
     <script>
         let currentStep = 1;
 
+        function updateProgressBar() {
+            const stepIndicators = document.querySelectorAll('.step-indicator');
+
+            stepIndicators.forEach((indicator, index) => {
+                if (index < currentStep) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+        }
+
         function nextStep(step) {
             document.getElementById(`step${step}`).classList.remove('active');
             currentStep = step + 1;
             document.getElementById(`step${currentStep}`).classList.add('active');
-
+            updateProgressBar();
         }
 
         function prevStep(step) {
             document.getElementById(`step${step}`).classList.remove('active');
             currentStep = step - 1;
             document.getElementById(`step${currentStep}`).classList.add('active');
-
+            updateProgressBar();
         }
-
+        // Initial setup
+        updateProgressBar();
 
         async function submitForm(event) {
             event.preventDefault();
@@ -556,6 +634,9 @@
                 // Hide the form and show the result section
                 document.getElementById('multiStepForm').style.display = 'none';
                 document.getElementById('result').style.display = 'block';
+
+                // Hide the progress bar
+                document.querySelector('.progress-bar-container').style.display = 'none';
             } catch (error) {
                 console.error('Error:', error);
                 alert('An error occurred. Please try again later.');
@@ -599,6 +680,8 @@
             document.querySelector('.load-text').innerHTML = 'Compiling financial brilliance... Almost there, your money\'s about to get wiser!';
             document.body.classList.add('loading');
             document.querySelector('.overlay').style.display = 'block';
+            // Hide the progress bar
+            document.querySelector('.progress-bar-container').style.display = 'none';
         }
 
         function hideLoader() {
@@ -629,6 +712,9 @@
 
             // Show the form
             document.getElementById('multiStepForm').style.display = 'block';
+            // Hide the progress bar
+            document.querySelector('.progress-bar-container').style.display = 'block';
+            document.querySelectorAll('.progress-bubble').forEach(bubble => bubble.classList.remove('active'));
         }
 
         function validateAge() {
@@ -668,6 +754,30 @@
                     return '';
             }
         }
+        let synth = window.speechSynthesis;
+        function speakAdvice() {
+            const adviceText = document.getElementById('resultText').innerText;
+            const utterance = new SpeechSynthesisUtterance(adviceText);
+
+            // Optionally set voice and other parameters
+            // utterance.voice = ...
+
+            synth.speak(utterance);
+        }
+        function stopSpeaking() {
+            // Stop speaking
+            synth.cancel();
+        }
+        window.onload = function () {
+            if ('speechSynthesis' in window) {
+                // Web Speech API is supported
+                // Your initialization code here
+            } else {
+                // Web Speech API is not supported
+                alert('Sorry, your browser does not support the Web Speech API.');
+            }
+        };
+
     </script>
 
 </body>
