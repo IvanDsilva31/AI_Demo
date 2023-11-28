@@ -7,10 +7,12 @@
     <title>AI Retirement Coach</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="./assets/css/templatemo-scholar.css">
+    <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon">
 
     <style>
         body {
-            background-color: #f8f9fa;
+            background: white;
+            background-size: cover;
             /* Set a background color for the body */
             display: flex;
             flex-direction: column;
@@ -168,19 +170,136 @@
             text-align: center;
             font-weight: 400;
             font: 14pt "Helvetica Neue", Helvetica, Arial, sans-serif;
-            color: rgb(8, 8, 8);
+            color: rgb(0, 0, 0);
         }
 
         #multiStepForm {
             display: block;
             /* Initially display the form */
-
-            /* Additional styles... */
         }
 
         .loader-active #multiStepForm {
             display: none;
             /* Hide the form when the loader is active */
+        }
+
+        .inp {
+            position: relative;
+            margin: auto;
+            width: 100%;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .inp .label {
+            position: absolute;
+            top: 20px;
+            left: 12px;
+            font-size: 16px;
+            color: rgba(0, 0, 0, 0.5);
+            font-weight: 500;
+            transform-origin: 0 0;
+            transform: translate3d(0, 0, 0);
+            transition: all 0.2s ease;
+            pointer-events: none;
+        }
+
+        .inp .focus-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.05);
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: left;
+        }
+
+        .inp input {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 100%;
+            border: 0;
+            font-family: inherit;
+            padding: 16px 12px 0 12px;
+            height: 56px;
+            font-size: 16px;
+            font-weight: 400;
+            background: rgba(0, 0, 0, 0.02);
+            box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+            color: #000;
+            transition: all 0.15s ease;
+        }
+
+        .inp input:hover {
+            background: rgba(0, 0, 0, 0.04);
+            box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .inp input:not(:-moz-placeholder-shown)+.label {
+            color: rgba(0, 0, 0, 0.5);
+            transform: translate3d(0, -12px, 0) scale(0.75);
+        }
+
+        .inp input:not(:-ms-input-placeholder)+.label {
+            color: rgba(0, 0, 0, 0.5);
+            transform: translate3d(0, -12px, 0) scale(0.75);
+        }
+
+        .inp input:not(:placeholder-shown)+.label {
+            color: rgba(0, 0, 0, 0.5);
+            transform: translate3d(0, -12px, 0) scale(0.75);
+        }
+
+        .inp input:focus {
+            background: rgba(0, 0, 0, 0.05);
+            outline: none;
+            box-shadow: inset 0 -2px 0 #0077FF;
+        }
+
+        .inp input:focus+.label {
+            color: #0077FF;
+            transform: translate3d(0, -12px, 0) scale(0.75);
+        }
+
+        .inp input:focus+.label+.focus-bg {
+            transform: scaleX(1);
+            transition: all 0.1s ease;
+        }
+
+        .user-info-pill {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 4px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* Style for the pinboard section */
+        #resultText {
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        /* Style for the start over button */
+        .btn-primary {
+            margin-top: 20px;
+        }
+
+        .btn-secondary {
+            margin-top: 20px;
+        }
+
+        .btn-success {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -226,22 +345,35 @@
     </header>
     <!-- ***** Header Area End ***** -->
 
+
     <div class="container mt-5">
         <form id="multiStepForm">
             <!-- Step 1: Age, Income, and Expenses -->
             <div class="step-content active" id="step1">
                 <h2>Step 1: Personal Details</h2>
                 <div class="form-group">
-                    <label for="age">Age:</label>
-                    <input type="number" class="form-control" id="age" name="age" required oninput="validateAge()">
+                    <label for="age" class="inp">
+                        <input type="number" class="form-control" id="age" name="age" required oninput="validateAge()"
+                            placeholder="&nbsp;">
+                        <span class="label">Age</span>
+                        <span class="focus-bg"></span>
+                    </label>
                 </div>
                 <div class="form-group">
-                    <label for="income">Income (in Rupees):</label>
-                    <input type="number" class="form-control" id="income" name="income" required>
+                    <label for="income" class="inp">
+                        <input type="number" class="form-control" id="income" name="income" required
+                            placeholder="&nbsp;">
+                        <span class="label">Income (in Rupees)</span>
+                        <span class="focus-bg"></span>
+                    </label>
                 </div>
                 <div class="form-group">
-                    <label for="expenses">Expenses (in Rupees):</label>
-                    <input type="number" class="form-control" id="expenses" name="expenses" required>
+                    <label for="expenses" class="inp">
+                        <input type="number" class="form-control" id="expenses" name="expenses" required
+                            placeholder="&nbsp;">
+                        <span class="label">Expenses (in Rupees)</span>
+                        <span class="focus-bg"></span>
+                    </label>
                 </div>
                 <button type="button" class="btn btn-primary" onclick="nextStep(1)">Next</button>
             </div>
@@ -250,16 +382,27 @@
             <div class="step-content" id="step2">
                 <h2>Step 2: Financial Goals</h2>
                 <div class="form-group">
-                    <label for="savings">Savings (in Rupees):</label>
-                    <input type="number" class="form-control" id="savings" name="savings" required>
+                    <label for="savings" class="inp">
+                        <input type="number" class="form-control" id="savings" name="savings" required
+                            placeholder="&nbsp;">
+                        <span class="label">Savings (in Rupees)</span>
+                        <span class="focus-bg"></span>
+                    </label>
                 </div>
                 <div class="form-group">
-                    <label for="debt">Debt (in Rupees):</label>
-                    <input type="number" class="form-control" id="debt" name="debt" required>
+                    <label for="debt" class="inp">
+                        <input type="number" class="form-control" id="debt" name="debt" required placeholder="&nbsp;">
+                        <span class="label">Debt (in Rupees)</span>
+                        <span class="focus-bg"></span>
+                    </label>
                 </div>
                 <div class="form-group">
-                    <label for="retirementGoal">Retirement Goal (in Rupees):</label>
-                    <input type="number" class="form-control" id="retirementGoal" name="retirementGoal" required>
+                    <label for="retirementGoal" class="inp">
+                        <input type="number" class="form-control" id="retirementGoal" name="retirementGoal" required
+                            placeholder="&nbsp;">
+                        <span class="label">Retirement Goal (in Rupees)</span>
+                        <span class="focus-bg"></span>
+                    </label>
                 </div>
                 <button type="button" class="btn btn-secondary" onclick="prevStep(2)">Previous</button>
                 <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next</button>
@@ -269,22 +412,26 @@
             <div class="step-content" id="step3">
                 <h2>Step 3: Investment Preferences</h2>
                 <div class="form-group">
-                    <label for="riskTolerance">Risk Tolerance:</label>
-                    <select class="form-control" id="riskTolerance" name="riskTolerance" required>
-                        <option value="" disabled selected>Select Risk Tolerance</option>
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                    </select>
+                    <label for="riskTolerance" class="inp">
+                        <select class="form-control" id="riskTolerance" name="riskTolerance" required>
+                            <option value="" disabled selected>Select Risk Tolerance</option>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                        <span class="focus-bg"></span>
+                    </label>
                 </div>
                 <div class="form-group">
-                    <label for="investmentPlan">Investment Plan:</label>
-                    <select class="form-control" id="investmentPlan" name="investmentPlan" required>
-                        <option value="" disabled selected>Select Investment Plan</option>
-                        <option value="short-term">Short Term Investment Horizon</option>
-                        <option value="medium-term">Medium Term Investment Horizon</option>
-                        <option value="long-term">Long Term Investment Horizon</option>
-                    </select>
+                    <label for="investmentPlan" class="inp">
+                        <select class="form-control" id="investmentPlan" name="investmentPlan" required>
+                            <option value="" disabled selected>Select Investment Plan</option>
+                            <option value="short-term">Short Term Investment Horizon</option>
+                            <option value="medium-term">Medium Term Investment Horizon</option>
+                            <option value="long-term">Long Term Investment Horizon</option>
+                        </select>
+                        <span class="focus-bg"></span>
+                    </label>
                 </div>
                 <button type="button" class="btn btn-secondary" onclick="prevStep(3)">Previous</button>
                 <button type="button" class="btn btn-success" onclick="submitForm(event)">Submit</button>
@@ -320,13 +467,16 @@
             document.getElementById(`step${step}`).classList.remove('active');
             currentStep = step + 1;
             document.getElementById(`step${currentStep}`).classList.add('active');
+
         }
 
         function prevStep(step) {
             document.getElementById(`step${step}`).classList.remove('active');
             currentStep = step - 1;
             document.getElementById(`step${currentStep}`).classList.add('active');
+
         }
+
 
         async function submitForm(event) {
             event.preventDefault();
@@ -354,17 +504,26 @@
             // Concatenate prompt with form data string
             const promptAndData = `${prompt}\n${formDataString}`;
 
-            // Display result
-            const userInfo = `Age: ${formData.age}<br>
-                            Income: ${formData.income}<br>
-                            Expenses: ${formData.expenses}<br>
-                            Savings: ${formData.savings}<br>
-                            Debt: ${formData.debt}<br>
-                            Retirement Goal: ${formData.retirementGoal}<br>
-                            Risk Tolerance: ${getRiskToleranceLabel(formData.riskTolerance)}<br>
-                            Investment Plan: ${getInvestmentPlanLabel(formData.investmentPlan)}`;
+            // Display user information in pill-shaped buttons
+            const userInfoContainer = document.getElementById('userInfo');
+            const userInformation = [
+                { label: 'Age', value: formData.age },
+                { label: 'Income', value: formData.income },
+                { label: 'Expenses', value: formData.expenses },
+                { label: 'Savings', value: formData.savings },
+                { label: 'Debt', value: formData.debt },
+                { label: 'Retirement Goal', value: formData.retirementGoal },
+                { label: 'Risk Tolerance', value: getRiskToleranceLabel(formData.riskTolerance) },
+                { label: 'Investment Plan', value: getInvestmentPlanLabel(formData.investmentPlan) }
+            ];
 
-            document.getElementById('userInfo').innerHTML = userInfo;
+            userInformation.forEach(info => {
+                const pillButton = document.createElement('button');
+                pillButton.classList.add('user-info-pill');
+                pillButton.innerHTML = `${info.label}: ${info.value}`;
+                userInfoContainer.appendChild(pillButton);
+            });
+
 
             try {
                 // Pass data to Hugging Face Inference API
@@ -374,10 +533,23 @@
                 const advice = huggingFaceResponse[0].generated_text.substring(adviceStartIndex);
 
                 // Replace newline characters with HTML line breaks
-                const formattedAdvice = advice.replace(/\n/g, '<br><br>');
+                const formattedAdvice = advice.replace(/\n/g, '<br>');
 
                 // Display result from Hugging Face
-                document.getElementById('resultText').innerHTML = `AI Retirement Coach's Advice: ${formattedAdvice}`;
+                // document.getElementById('resultText').innerHTML = `AI Retirement Coach's Advice: ${formattedAdvice}`;
+
+                // hideLoader();
+
+                // Display result from Hugging Face
+                const resultTextContainer = document.getElementById('resultText');
+                resultTextContainer.innerHTML = `<strong style="font-size: 18px;">AI Retirement Coach's Advice:</strong>`;
+
+                // Split the advice into points and display each point on a new line
+                const advicePoints = formattedAdvice.split(/\d+\.\s/).filter(Boolean);
+
+                advicePoints.forEach((point, index) => {
+                    resultTextContainer.innerHTML += `<br>${index + 1}. ${point}`;
+                });
 
                 hideLoader();
 
